@@ -6,6 +6,7 @@ using BusinessAPI.Service.DependencyInjection;
 using BusinessAPI.Domain.DependencyInjection;
 using FluentValidation;
 using BusinessAPI.Domain.DependencyInjection;
+using BusinessAPI.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +30,7 @@ builder.Services.AddUserServices();
 
 var app = builder.Build();
 
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI();
 

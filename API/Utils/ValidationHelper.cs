@@ -1,3 +1,4 @@
+using BusinessAPI.Utils.Models.CustomExceptions;
 using FluentValidation.Results;
 
 namespace BusinessAPI.Api.Utils;
@@ -14,13 +15,6 @@ public static class ValidationHelper
     })
     .ToList();
 
-    throw new Exception("Validation Error")
-    {
-      Data =
-        {
-          ["StatusCode"] = StatusCodes.Status400BadRequest,
-          ["Errors"] = errors
-        }
-    };
+    throw new ValidationException("Validation failed", errors);
   }
 }

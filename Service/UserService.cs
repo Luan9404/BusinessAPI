@@ -6,6 +6,7 @@ using BusinessAPI.Service.Models.Result;
 using Microsoft.AspNetCore.Http.HttpResults;
 using BusinessAPI.Service.Models.Result;
 using BusinessAPI.Service.Models.Request;
+using BusinessAPI.Utils;
 
 namespace BusinessAPI.Service;
 
@@ -18,7 +19,26 @@ public class UserService : IUserService
   }
   public CreateUserResult CreateUser(CreateUserRequest request)
   {
-    throw new NotImplementedException();
+    User user = new()
+    {
+      Login = request.Login,
+      Email = request.Email,
+      Name = request.Name,
+      Phone = request.Phone,
+      UserCredential = new()
+      {
+        Password = CryptoHelper.Encrypt(request.Password),
+      }
+    };
+
+    User createUserResult = _userRepository.Create(user);
+
+    CreateUserResult result = new()
+    {
+      UserId = createUserResult.UserId,
+    };
+
+    return result;
   }
 
   public User GetUser(long id)

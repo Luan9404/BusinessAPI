@@ -1,3 +1,4 @@
+using System.Net;
 using System.Text.Json;
 
 namespace BusinessAPI.Api.Middlewares;
@@ -27,12 +28,12 @@ public class ExceptionHandlerMiddleware
     context.Response.ContentType = "application/json";
     context.Response.StatusCode = exception.Data["StatusCode"] != null
       ? (int)exception.Data["StatusCode"]
-      : StatusCodes.Status500InternalServerError;
+      : (int)HttpStatusCode.InternalServerError;
 
     var result = JsonSerializer.Serialize(new
     {
       StatusCode = context.Response.StatusCode,
-      Message = exception.Message ?? "Internal Server Error",
+      Message = context.Response.StatusCode != 500 ? exception.Message : "Internal Server Error",
       Errors = exception.Data["Errors"] ?? null
     });
 

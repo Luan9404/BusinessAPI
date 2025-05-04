@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using BusinessAPI.Domain.Entities;
 using BusinessAPI.Domain.Repository.Interface;
+using BusinessAPI.Utils.Models.CustomExceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -15,8 +16,24 @@ public class UserRepository : IUserRepository
     _context = context;
   }
 
+  public User Create(User user)
+  {
+    var result = _context.User.Add(user).Entity;
+
+    _context.SaveChanges();
+
+    return result;
+  }
+
   public User GetById(long id)
   {
-    return _context.User.Include(u => u.UserCredential).Single(x => x.UserId == id);
+    var user = _context.User.SingleOrDefault(x => x.UserId == id);
+
+    if (user == null)
+      throw new NotFoundException("User not found");
+
+    _context.Entry(user).Reference(x => x.UserCredential).Load();
+
+    return user;
   }
 }

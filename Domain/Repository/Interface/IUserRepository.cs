@@ -5,4 +5,5 @@ namespace BusinessAPI.Domain.Repository.Interface;
 public interface IUserRepository
 {
   public User GetById(long id);
+  public User Create(User user);
 }

@@ -17,6 +17,8 @@ public class CreateUserValidator : AbstractValidator<CreateUserRequest>
       .MinimumLength(8);
     RuleFor(x => x.Phone)
       .NotEmpty()
-      .Length(11);
+      .Length(11)
+      .Matches(@"^\d+$")
+      .WithMessage("Phone number must contain only numbers.");
   }
 }

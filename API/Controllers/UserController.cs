@@ -8,6 +8,8 @@ using BusinessAPI.Api.Models.Response;
 using BusinessAPI.Api.Models.Request;
 using BusinessAPI.Domain.Entities;
 using BusinessAPI.Api.Utils;
+using ServiceRequest = BusinessAPI.Service.Models.Request;
+using BusinessAPI.Api.Mapping;
 namespace BusinessAPI.Api.Controllers;
 
 [Route("[controller]")]
@@ -15,16 +17,17 @@ public class UserController : Controller
 {
   private readonly IUserService _userService;
   private readonly IValidator<CreateUserRequest> _createUserValidator;
+  private readonly UserMapper _mapper;
   public UserController(IUserService userService, IServiceProvider serviceProvider)
   {
     _userService = userService;
     _createUserValidator = serviceProvider.GetService<IValidator<CreateUserRequest>>();
+    _mapper = new();
   }
 
   [HttpGet("{Id}")]
   public IActionResult GetUser([FromRoute] long Id)
   {
-
     User result = _userService.GetUser(Id);
     Response<User> response = new(result);
 
@@ -44,6 +47,11 @@ public class UserController : Controller
     if (!validateResult.IsValid)
       ValidationHelper.ThrowErrors(validateResult);
 
-    return Ok();
+    ServiceRequest.CreateUserRequest serviceRequest = _mapper.Map(request);
+    CreateUserResult result = _userService.CreateUser(serviceRequest);
+
+    Response<CreateUserResult> response = new(result);
+
+    return Ok(response);
   }
 }

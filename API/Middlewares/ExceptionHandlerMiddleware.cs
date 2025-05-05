@@ -32,7 +32,6 @@ public class ExceptionHandlerMiddleware
 
     var result = JsonSerializer.Serialize(new
     {
-      StatusCode = context.Response.StatusCode,
       Message = context.Response.StatusCode != 500 ? exception.Message : "Internal Server Error",
       Errors = exception.Data["Errors"] ?? null
     });

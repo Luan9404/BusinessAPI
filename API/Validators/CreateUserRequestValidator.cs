@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace BusinessAPI.Api.Validators;
 
-public class CreateUserValidator : AbstractValidator<CreateUserRequest>
+public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
 {
-  public CreateUserValidator()
+  public CreateUserRequestValidator()
   {
     RuleFor(x => x.Login).NotEmpty();
     RuleFor(x => x.Email)

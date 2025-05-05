@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace BusinessAPI.Api.Models.Request;
 
 public class CreateUserRequest

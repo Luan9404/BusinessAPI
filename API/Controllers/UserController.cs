@@ -17,17 +17,29 @@ public class UserController : Controller
 {
   private readonly IUserService _userService;
   private readonly IValidator<CreateUserRequest> _createUserValidator;
+  private readonly IValidator<GetUserByIdRequest> _getUserByIdValidator;
   private readonly UserMapper _mapper;
   public UserController(IUserService userService, IServiceProvider serviceProvider)
   {
     _userService = userService;
     _createUserValidator = serviceProvider.GetService<IValidator<CreateUserRequest>>();
+    _getUserByIdValidator = serviceProvider.GetService<IValidator<GetUserByIdRequest>>();
     _mapper = new();
   }
-
+  /// <summary>
+  /// 
+  /// </summary>
+  /// <param name="Id">UserId</param>
+  /// <returns></returns>
   [HttpGet("{Id}")]
   public IActionResult GetUser([FromRoute] long Id)
   {
+    GetUserByIdRequest request = new() { UserId = Id };
+    var validateResult = _getUserByIdValidator.Validate(request);
+
+    if (!validateResult.IsValid)
+      ValidationHelper.ThrowErrors(validateResult);
+
     User result = _userService.GetUser(Id);
     Response<User> response = new(result);
 

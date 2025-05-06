@@ -7,4 +7,5 @@ public interface IUserService
 {
   public User GetUser(long id);
   public CreateUserResult CreateUser(CreateUserRequest request);
+  public void UpdateUser(UpdateUserRequest request);
 }

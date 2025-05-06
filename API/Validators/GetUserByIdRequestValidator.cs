@@ -11,6 +11,6 @@ public class GetUserByIdRequestValidator : AbstractValidator<GetUserByIdRequest>
       .NotEmpty()
       .WithMessage("UserId is required.")
       .GreaterThan(0)
-      .WithMessage("Id must be greater than 0.");
+      .WithMessage("Invalid UserId.");
   }
 }

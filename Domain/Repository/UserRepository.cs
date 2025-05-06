@@ -36,4 +36,16 @@ public class UserRepository : IUserRepository
 
     return user;
   }
+  public void Update(User user)
+  {
+    var entry = _context.Entry(user);
+    if (entry.State == EntityState.Detached)
+    {
+      _context.User.Attach(user);
+    }
+
+    entry.State = EntityState.Modified;
+
+    _context.SaveChanges();
+  }
 }

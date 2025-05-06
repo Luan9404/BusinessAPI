@@ -18,12 +18,14 @@ public class UserController : Controller
   private readonly IUserService _userService;
   private readonly IValidator<CreateUserRequest> _createUserValidator;
   private readonly IValidator<GetUserByIdRequest> _getUserByIdValidator;
+  private readonly IValidator<UpdateUserRequest> _updateUserValidator;
   private readonly UserMapper _mapper;
   public UserController(IUserService userService, IServiceProvider serviceProvider)
   {
     _userService = userService;
     _createUserValidator = serviceProvider.GetService<IValidator<CreateUserRequest>>();
     _getUserByIdValidator = serviceProvider.GetService<IValidator<GetUserByIdRequest>>();
+    _updateUserValidator = serviceProvider.GetService<IValidator<UpdateUserRequest>>();
     _mapper = new();
   }
   /// <summary>
@@ -63,6 +65,25 @@ public class UserController : Controller
     CreateUserResult result = _userService.CreateUser(serviceRequest);
 
     Response<CreateUserResult> response = new(result);
+
+    return Ok(response);
+  }
+
+  [HttpPut("{Id}")]
+  public IActionResult UpdateUser([FromBody] UpdateUserRequest request, [FromRoute] long Id)
+  {
+    request.InsertUserId(Id);
+
+    var validateResult = _updateUserValidator.Validate(request);
+
+    if (!validateResult.IsValid)
+      ValidationHelper.ThrowErrors(validateResult);
+
+    ServiceRequest.UpdateUserRequest serviceRequest = _mapper.Map(request);
+
+    _userService.UpdateUser(serviceRequest);
+
+    Response<string> response = new("User updated successfully");
 
     return Ok(response);
   }

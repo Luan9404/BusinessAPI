@@ -15,4 +15,16 @@ public class UserMapper
       Phone = request.Phone
     };
   }
+  public ServiceRequest.UpdateUserRequest Map(UpdateUserRequest request)
+  {
+    return new ServiceRequest.UpdateUserRequest
+    {
+      UserId = request.GetUserId(),
+      Login = request.Login,
+      Email = request.Email,
+      Name = request.Name,
+      Password = request.Password,
+      Phone = request.Phone
+    };
+  }
 }

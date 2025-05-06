@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using BusinessAPI.Service.Models.Result;
 using BusinessAPI.Service.Models.Request;
 using BusinessAPI.Utils;
+using BusinessAPI.Utils.Models.CustomExceptions;
 
 namespace BusinessAPI.Service;
 
@@ -51,5 +52,22 @@ public class UserService : IUserService
       throw new Exception();
 
     return user;
+  }
+
+  public void UpdateUser(UpdateUserRequest request)
+  {
+    User user = _userRepository.GetById(request.UserId);
+    if (user == null)
+      throw new ValidationException("User not found");
+
+    user.Name = request.Name ?? user.Name;
+    user.Email = request.Email ?? user.Email;
+    user.Phone = request.Phone ?? user.Phone;
+    user.Login = request.Login ?? user.Login;
+
+    if (!string.IsNullOrEmpty(request.Password))
+      user.UserCredential.Password = CryptoHelper.Encrypt(request.Password);
+
+    _userRepository.Update(user);
   }
 }

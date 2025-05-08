@@ -27,7 +27,7 @@ public class ExceptionHandlerMiddleware
   {
     context.Response.ContentType = "application/json";
     context.Response.StatusCode = exception.Data["StatusCode"] != null
-      ? (int)exception.Data["StatusCode"]
+      ? (int)(exception.Data["StatusCode"] ?? 500)
       : (int)HttpStatusCode.InternalServerError;
 
     var result = JsonSerializer.Serialize(new

@@ -10,4 +10,9 @@ public class AuthController : Controller
   {
     return Ok();
   }
+  [HttpPost("[action]")]
+  public IActionResult ResetPassword([FromBody] object request)
+  {
+    return Ok();
+  }
 }

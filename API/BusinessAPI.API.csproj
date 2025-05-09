@@ -25,7 +25,6 @@
 
   <ItemGroup>
     <ProjectReference Include="../Service/BusinessAPI.Service.csproj" />
-    <ProjectReference Include="../Infrastructure/Data/BusinessAP.Infrastructure.Data.csproj" />
   </ItemGroup>
 
 
